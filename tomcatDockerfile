@@ -1,0 +1,22 @@
+FROM docker.io/centos
+
+MAINTAINER BMF<752294972@qq.com>
+
+ENV baseDir="/home/tomcat" JAVA_HOME="/home/tomcat/jdk1.8.0_151" CATALINA_HOME="/home/tomcat/apache-tomcat-8.5.24" CATALINA_BASE="/home/tomcat/tomcatBase"
+
+WORKDIR ${baseDir}
+
+COPY ./tomcat.tar.gz ./
+
+RUN tar zxvf ${baseDir}/tomcat.tar.gz && rm -rf ${baseDir}/tomcat.tar.gz && groupadd -f tomcat &&  adduser -g tomcat -d ${baseDir} tomcat_user && chown -R tomcat_user:tomcat ./ &&  chmod -R 755 ./ && ls
+
+VOLUME ["${baseDir}/tomcatBase/bin", "${baseDir}/tomcatBase/lib", "${baseDir}/tomcatBase/logs", "${baseDir}/tomcatBase/webapps"]
+
+EXPOSE 8080 8005 8009 1099
+
+USER tomcat_user
+
+CMD ["/home/tomcat/start.sh"]
+
+
+
